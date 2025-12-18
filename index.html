@@ -4,16 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BTX Docs Saúde</title>
+  <meta name="description" content="Gerador de documentos clínicos offline-first: receituário, laudo, recibo, orçamento, atestado e ficha clínica." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="brand">
-        <img class="brand-logo" src="logo.png" alt="BTX" />
-        <div>
+        <div class="brand-mark">
+          <img class="brand-logo" src="logo.png" alt="BTX" onerror="this.style.display='none';document.getElementById('fallbackBTX').style.display='flex';" />
+          <div id="fallbackBTX" class="fallback-btx" style="display:none;">BTX</div>
+        </div>
+        <div class="brand-text">
           <div class="brand-title">BTX Docs Saúde</div>
-          <div class="brand-sub">rápido • profissional • offline-ready</div>
+          <div class="brand-sub">rápido • profissional • local</div>
         </div>
       </div>
 
@@ -40,7 +44,7 @@
 
         <div class="topbar-title">
           <div class="ttl" id="pageTitle">Receituário</div>
-          <div class="sub" id="pageSub">Selecione itens e imprima.</div>
+          <div class="sub" id="pageSub">Selecione itens, ajuste e imprima.</div>
         </div>
 
         <div class="topbar-actions">
@@ -56,7 +60,7 @@
         <section class="card tab" id="tab-receituario">
           <div class="card-head">
             <h2>Receituário</h2>
-            <div class="muted">Clique em um item para adicionar ao texto.</div>
+            <div class="muted">Clique nos itens para adicionar no texto. Você pode editar tudo.</div>
           </div>
 
           <div class="grid2">
@@ -70,6 +74,22 @@
             </div>
           </div>
 
+          <div class="toolbar">
+            <div class="seg" role="group" aria-label="Modo">
+              <button class="segbtn active" data-mode="adulto">Adulto</button>
+              <button class="segbtn" data-mode="pediatria">Pediatria</button>
+              <button class="segbtn" data-mode="livre">Livre</button>
+            </div>
+
+            <div class="quick">
+              <button class="pill" data-quick="analgesico">Analgésico</button>
+              <button class="pill" data-quick="antiinflamatorio">Anti-inflamatório</button>
+              <button class="pill" data-quick="antibiotico">Antibiótico</button>
+              <button class="pill" id="btnManual">+ Item manual</button>
+              <button class="pill danger" id="btnClearRx">Limpar</button>
+            </div>
+          </div>
+
           <div class="field">
             <label>Buscar medicamento</label>
             <input id="rx_search" placeholder="Ex.: amoxicilina, ibuprofeno, paracetamol..." />
@@ -80,14 +100,24 @@
 
             <div class="rx-right">
               <div class="field">
-                <label>Receita (editável)</label>
-                <textarea id="rx_texto" rows="12" placeholder="Clique nos medicamentos à esquerda ou escreva livremente."></textarea>
+                <label>Itens selecionados</label>
+                <div class="chips" id="rx_chips"></div>
               </div>
+
+              <div class="field">
+                <label>Receita (editável)</label>
+                <textarea id="rx_texto" rows="10" placeholder="Clique nos medicamentos à esquerda ou escreva livremente."></textarea>
+              </div>
+
               <div class="field">
                 <label>Observações</label>
                 <textarea id="rx_obs" rows="4" placeholder="Orientações gerais, retorno, sinais de alarme..."></textarea>
               </div>
             </div>
+          </div>
+
+          <div class="note muted">
+            Obs.: modelos são atalhos. Ajuste conforme avaliação clínica.
           </div>
         </section>
 
@@ -119,7 +149,7 @@
 
           <div class="field">
             <label>Texto</label>
-            <textarea id="ld_texto" rows="12"></textarea>
+            <textarea id="ld_texto" rows="12" placeholder="Descreva achados, hipótese, conduta, recomendações..."></textarea>
           </div>
         </section>
 
@@ -133,11 +163,11 @@
           <div class="grid2">
             <div class="field">
               <label>Recebi de</label>
-              <input id="rc_pagador" />
+              <input id="rc_pagador" placeholder="Nome do pagador/paciente" />
             </div>
             <div class="field">
               <label>Documento (opcional)</label>
-              <input id="rc_doc" />
+              <input id="rc_doc" placeholder="CPF/RG (opcional)" />
             </div>
             <div class="field">
               <label>Valor (R$)</label>
@@ -151,7 +181,7 @@
 
           <div class="field">
             <label>Referente a</label>
-            <textarea id="rc_ref" rows="8"></textarea>
+            <textarea id="rc_ref" rows="8" placeholder="Descreva o serviço/procedimento/consulta..."></textarea>
           </div>
         </section>
 
@@ -175,7 +205,7 @@
 
           <div class="field">
             <label>Descrição</label>
-            <textarea id="or_texto" rows="12"></textarea>
+            <textarea id="or_texto" rows="12" placeholder="Ex.: Procedimentos + valores, condições, validade do orçamento..."></textarea>
           </div>
         </section>
 
@@ -183,7 +213,7 @@
         <section class="card tab hidden" id="tab-atestado">
           <div class="card-head">
             <h2>Atestado</h2>
-            <div class="muted">Com tempo de afastamento e CID opcional.</div>
+            <div class="muted">Com afastamento e CID opcional.</div>
           </div>
 
           <div class="grid2">
@@ -207,7 +237,7 @@
 
           <div class="field">
             <label>Texto</label>
-            <textarea id="at_texto" rows="10"></textarea>
+            <textarea id="at_texto" rows="10" placeholder="Declaro para os devidos fins que..."></textarea>
           </div>
         </section>
 
@@ -256,43 +286,64 @@
         <section class="card tab hidden" id="tab-config">
           <div class="card-head">
             <h2>Configurações do Profissional</h2>
-            <div class="muted">Auto-preenche os documentos.</div>
+            <div class="muted">Auto-preenche cabeçalho e assinatura nos documentos.</div>
           </div>
 
           <div class="grid2">
             <div class="field">
               <label>Nome</label>
-              <input id="cfg_nome" />
+              <input id="cfg_nome" placeholder="Seu nome" />
             </div>
             <div class="field">
               <label>Registro (CRO/CRM)</label>
-              <input id="cfg_registro" />
+              <input id="cfg_registro" placeholder="Ex.: CRO-PA 00000 / CRM-PA 00000" />
             </div>
             <div class="field">
               <label>Telefone (opcional)</label>
-              <input id="cfg_tel" />
+              <input id="cfg_tel" placeholder="(xx) xxxxx-xxxx" />
             </div>
             <div class="field">
               <label>Cidade/UF</label>
-              <input id="cfg_cidade" />
+              <input id="cfg_cidade" placeholder="Ex.: Abaetetuba/PA" />
             </div>
           </div>
 
           <div class="field">
             <label>Endereço/Clínica (opcional)</label>
-            <input id="cfg_end" />
+            <input id="cfg_end" placeholder="Endereço/Clínica (opcional)" />
           </div>
 
           <div class="row">
             <button class="btn" id="btnSaveCfg">Salvar</button>
             <button class="btn ghost" id="btnResetCfg">Restaurar</button>
           </div>
+
+          <div class="muted small">
+            Dica: depois de salvar, todos os PDFs já saem com seu nome/registro.
+          </div>
         </section>
 
       </section>
 
-      <section class="print-area" id="printArea"></section>
+      <!-- Área de impressão -->
+      <section class="print-area" id="printArea" aria-hidden="true"></section>
     </main>
+  </div>
+
+  <!-- Modal simples para item manual -->
+  <div class="modal hidden" id="modal">
+    <div class="modal-box">
+      <div class="modal-title">Adicionar item manual</div>
+      <div class="field">
+        <label>Texto do item</label>
+        <textarea id="manualText" rows="5" placeholder="Ex.: Dipirona 500 mg — 1 comp VO 8/8h por 3 dias."></textarea>
+      </div>
+      <div class="row end">
+        <button class="btn ghost" id="btnCancelManual">Cancelar</button>
+        <button class="btn" id="btnAddManual">Adicionar</button>
+      </div>
+    </div>
+    <div class="modal-backdrop" id="modalBackdrop"></div>
   </div>
 
   <script src="app.js"></script>
