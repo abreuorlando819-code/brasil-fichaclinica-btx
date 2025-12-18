@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BTX Docs Saúde</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <img class="brand-logo" src="logo.png" alt="BTX" />
+        <div>
+          <div class="brand-title">BTX Docs Saúde</div>
+          <div class="brand-sub">rápido • profissional • offline-ready</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="navbtn active" data-tab="receituario">Receituário</button>
+        <button class="navbtn" data-tab="laudo">Laudo</button>
+        <button class="navbtn" data-tab="recibo">Recibo</button>
+        <button class="navbtn" data-tab="orcamento">Orçamento</button>
+        <button class="navbtn" data-tab="atestado">Atestado</button>
+        <button class="navbtn" data-tab="ficha">Ficha Clínica</button>
+        <button class="navbtn" data-tab="config">Configurações</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="tip">
+          PDF: clique em <b>Imprimir / PDF</b> → “Salvar como PDF”.
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="iconbtn" id="menuBtn" title="Menu">☰</button>
+
+        <div class="topbar-title">
+          <div class="ttl" id="pageTitle">Receituário</div>
+          <div class="sub" id="pageSub">Selecione itens e imprima.</div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="btn ghost" id="btnNew">Novo</button>
+          <button class="btn ghost" id="btnPreview">Pré-visualizar</button>
+          <button class="btn" id="btnPrint">Imprimir / PDF</button>
+        </div>
+      </header>
+
+      <section class="content">
+
+        <!-- RECEITUÁRIO -->
+        <section class="card tab" id="tab-receituario">
+          <div class="card-head">
+            <h2>Receituário</h2>
+            <div class="muted">Clique em um item para adicionar ao texto.</div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Paciente</label>
+              <input id="rx_paciente" placeholder="Nome do paciente" />
+            </div>
+            <div class="field">
+              <label>Data</label>
+              <input id="rx_data" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Buscar medicamento</label>
+            <input id="rx_search" placeholder="Ex.: amoxicilina, ibuprofeno, paracetamol..." />
+          </div>
+
+          <div class="rx-grid">
+            <div class="rx-list" id="rx_list"></div>
+
+            <div class="rx-right">
+              <div class="field">
+                <label>Receita (editável)</label>
+                <textarea id="rx_texto" rows="12" placeholder="Clique nos medicamentos à esquerda ou escreva livremente."></textarea>
+              </div>
+              <div class="field">
+                <label>Observações</label>
+                <textarea id="rx_obs" rows="4" placeholder="Orientações gerais, retorno, sinais de alarme..."></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LAUDO -->
+        <section class="card tab hidden" id="tab-laudo">
+          <div class="card-head">
+            <h2>Laudo</h2>
+            <div class="muted">Modelo livre, pronto para PDF.</div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Paciente</label>
+              <input id="ld_paciente" />
+            </div>
+            <div class="field">
+              <label>Data</label>
+              <input id="ld_data" />
+            </div>
+            <div class="field">
+              <label>Título</label>
+              <input id="ld_titulo" placeholder="Ex.: Laudo / Relatório" />
+            </div>
+            <div class="field">
+              <label>Solicitante (opcional)</label>
+              <input id="ld_solic" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Texto</label>
+            <textarea id="ld_texto" rows="12"></textarea>
+          </div>
+        </section>
+
+        <!-- RECIBO -->
+        <section class="card tab hidden" id="tab-recibo">
+          <div class="card-head">
+            <h2>Recibo</h2>
+            <div class="muted">Simples e profissional.</div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Recebi de</label>
+              <input id="rc_pagador" />
+            </div>
+            <div class="field">
+              <label>Documento (opcional)</label>
+              <input id="rc_doc" />
+            </div>
+            <div class="field">
+              <label>Valor (R$)</label>
+              <input id="rc_valor" placeholder="Ex.: 150,00" />
+            </div>
+            <div class="field">
+              <label>Data</label>
+              <input id="rc_data" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Referente a</label>
+            <textarea id="rc_ref" rows="8"></textarea>
+          </div>
+        </section>
+
+        <!-- ORÇAMENTO -->
+        <section class="card tab hidden" id="tab-orcamento">
+          <div class="card-head">
+            <h2>Orçamento</h2>
+            <div class="muted">Texto livre (sem soma automática).</div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Paciente</label>
+              <input id="or_paciente" />
+            </div>
+            <div class="field">
+              <label>Data</label>
+              <input id="or_data" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Descrição</label>
+            <textarea id="or_texto" rows="12"></textarea>
+          </div>
+        </section>
+
+        <!-- ATESTADO -->
+        <section class="card tab hidden" id="tab-atestado">
+          <div class="card-head">
+            <h2>Atestado</h2>
+            <div class="muted">Com tempo de afastamento e CID opcional.</div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Paciente</label>
+              <input id="at_paciente" />
+            </div>
+            <div class="field">
+              <label>Data</label>
+              <input id="at_data" />
+            </div>
+            <div class="field">
+              <label>Tempo de afastamento</label>
+              <input id="at_tempo" placeholder="Ex.: 02 dias" />
+            </div>
+            <div class="field">
+              <label>CID (opcional)</label>
+              <input id="at_cid" placeholder="Ex.: Z00.0" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Texto</label>
+            <textarea id="at_texto" rows="10"></textarea>
+          </div>
+        </section>
+
+        <!-- FICHA CLÍNICA -->
+        <section class="card tab hidden" id="tab-ficha">
+          <div class="card-head">
+            <h2>Ficha Clínica</h2>
+            <div class="muted">Essencial e rápida.</div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Paciente</label>
+              <input id="fc_paciente" />
+            </div>
+            <div class="field">
+              <label>Data</label>
+              <input id="fc_data" />
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Queixa principal</label>
+              <textarea id="fc_qp" rows="5"></textarea>
+            </div>
+            <div class="field">
+              <label>História / Observações</label>
+              <textarea id="fc_hist" rows="5"></textarea>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Exame</label>
+              <textarea id="fc_exame" rows="6"></textarea>
+            </div>
+            <div class="field">
+              <label>Conduta</label>
+              <textarea id="fc_conduta" rows="6"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONFIG -->
+        <section class="card tab hidden" id="tab-config">
+          <div class="card-head">
+            <h2>Configurações do Profissional</h2>
+            <div class="muted">Auto-preenche os documentos.</div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Nome</label>
+              <input id="cfg_nome" />
+            </div>
+            <div class="field">
+              <label>Registro (CRO/CRM)</label>
+              <input id="cfg_registro" />
+            </div>
+            <div class="field">
+              <label>Telefone (opcional)</label>
+              <input id="cfg_tel" />
+            </div>
+            <div class="field">
+              <label>Cidade/UF</label>
+              <input id="cfg_cidade" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Endereço/Clínica (opcional)</label>
+            <input id="cfg_end" />
+          </div>
+
+          <div class="row">
+            <button class="btn" id="btnSaveCfg">Salvar</button>
+            <button class="btn ghost" id="btnResetCfg">Restaurar</button>
+          </div>
+        </section>
+
+      </section>
+
+      <section class="print-area" id="printArea"></section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
